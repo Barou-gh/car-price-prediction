@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Car Valuation - AutoValue 2026</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#f8fafc; --surface:#fff; --text:#0f172a; --text-light:#475569;
+      --primary:#2563eb; --accent:#10b981;
+      --border:rgba(226,232,240,.7); --shadow:0 20px 50px rgba(0,0,0,.14);
+      --radius:18px;
+    }
+    body{font-family:Inter,sans-serif;background:var(--bg);margin:0}
+    header{background:linear-gradient(135deg,#1e40af,#065f46);color:#fff;text-align:center;padding:5rem 1.5rem 3.5rem}
+    h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,7vw,4.2rem)}
+    .container{max-width:1100px;margin:3rem auto;padding:0 1.5rem}
+    .card{background:#fff;border-radius:18px;padding:3rem;box-shadow:var(--shadow);border:1px solid var(--border)}
+    .section-title{font-size:1.5rem;font-weight:700;color:#2563eb;margin:2.5rem 0 1.2rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem 2rem}
+    label{font-weight:600;color:#475569;font-size:.95rem;margin-bottom:.4rem;display:block}
+    input,select{width:100%;padding:.9rem 1.1rem;border-radius:12px;border:1px solid var(--border);font-size:1rem}
+    .action{text-align:center;margin-top:3.5rem}
+    button{padding:1.3rem 4rem;font-size:1.3rem;border:none;border-radius:999px;background:linear-gradient(90deg,#2563eb,#3b82f6);color:#fff;cursor:pointer}
+    #result{margin-top:3.5rem;display:none;text-align:center;background:#ecfdf5;padding:3rem;border-radius:24px}
+    .price{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,9vw,5.5rem);color:#10b981}
+    .trend-note{margin-top:.8rem;color:#065f46;font-weight:600}
+    .emi-btn{margin-top:2rem;background:linear-gradient(90deg,#10b981,#34d399)}
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Car Valuation</h1>
+  <p>AI-powered used car price estimation - India 2026</p>
+</header>
+
+<div class="container">
+<div class="card">
+
+<div class="section-title">Basic Vehicle Details</div>
+<div class="grid">
+
+  <div>
+    <label>Make</label>
+    <select id="make" onchange="loadModels()"></select>
+  </div>
+
+  <div>
+    <label>Model</label>
+    <select id="model" onchange="loadVariants()" disabled></select>
+  </div>
+
+  <div>
+    <label>Manufacturing Year</label>
+    <input type="number" id="year">
+  </div>
+
+  <div>
+    <label>Kilometers Driven</label>
+    <input type="number" id="kms">
+  </div>
+
+  <div>
+    <label>Fuel</label>
+    <select id="fuel">
+      <option value="CNG">CNG</option>
+      <option value="Diesel">Diesel</option>
+      <option value="Electric">Electric</option>
+      <option value="LPG">LPG</option>
+      <option value="Petrol">Petrol</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Mileage (kmpl/kWh)</label>
+    <input type="number" id="mileage">
+  </div>
+
+  <div>
+    <label>Owners</label>
+    <input type="number" id="owners" min="1" max="10">
+  </div>
+
+  <div>
+    <label>Transmission Type</label>
+    <select id="transmission">
+      <option value="Automatic">Automatic</option>
+      <option value="Manual">Manual</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Variant</label>
+    <select id="variant" disabled></select>
+  </div>
+
+  <div>
+    <label for="color">Color</label>
+    <select id="color"></select>
+
+  </div>
+
+  <div>
+    <label>City</label>
+    <select id="city"></select>
+  </div>
+
+</div>
+
+<div class="section-title">Condition & Legal</div>
+<div class="grid">
+
+  <div><label>RC Status</label>
+    <select id="rc_status">
+      <option value="Active">Active</option>
+      <option value="Expired">Expired</option>
+    </select>
+  </div>
+
+  <div><label>Loan Clearance</label>
+    <select id="loan_clearance">
+      <option value="Average">Average</option>
+      <option value="Cleared">Cleared</option>
+      <option value="Ongoing">Ongoing</option>
+    </select>
+  </div>
+
+  <div><label>Accident History</label>
+    <select id="accident_history">
+      <option value="Not Reported">Not Reported</option>
+      <option value="Reported">Reported</option>
+    </select>
+  </div>
+
+  <div><label>Insurance Claims</label>
+    <select id="insurance_claims">
+      <option value="Multiple">Multiple</option>
+      <option value="Single">Single</option>
+    </select>
+  </div>
+
+  <div><label>Service Records</label>
+    <select id="service_records">
+      <option value="Full">Full</option>
+      <option value="Partial">Partial</option>
+    </select>
+  </div>
+
+  <!-- 3-level condition fields -->
+  <div><label>Body Panels</label><select id="body_panels"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Rust</label><select id="rust"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Glass Condition</label><select id="glass_condition"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Lights Condition</label><select id="lights_condition"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Tyres</label><select id="tyres"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Seats Condition</label><select id="seats_condition"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Electronics Condition</label><select id="electronics_condition"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Smell</label><select id="smell"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Engine Condition</label><select id="engine_condition"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Transmission Condition</label><select id="transmission_condition"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Brakes Condition</label><select id="brakes_condition"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+  <div><label>Steering Condition</label><select id="steering_condition"><option value="Good">Good</option><option value="Average">Average</option><option value="Poor">Poor</option></select></div>
+ 
+  <div>
+  <label>Airbags Present</label>
+  <select id="airbags_present">
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+  </div>
+
+  <div>
+  <label>Airbags Count</label>
+  <select id="airbags_count">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="4">4</option>
+    <option value="6">6</option>
+  </select>
+  </div>
+
+  <div>
+  <label>Safety Systems</label>
+  <select id="safety_systems">
+    <option value="Seat belts">Seat belts</option>
+    <option value="Seat belts, ABS">Seat belts, ABS</option>
+    <option value="Seat belts, ABS, EBD">Seat belts, ABS, EBD</option>
+    <option value="Seat belts, ABS, EBD, ESP, Traction control">Seat belts, ABS, EBD, ESP, Traction control</option>
+    <option value="Seat belts, ABS, Multiple airbags, Lane assist, Advanced stability control">Seat belts, ABS, Multiple airbags, Lane assist, Advanced stability control</option>
+    <option value="Seat belts, ABS, EBD, Multiple airbags, Lane assist, Advanced stability control">Seat belts, ABS, EBD, Multiple airbags, Lane assist, Advanced stability control</option>
+  </select>
+  </div>
+
+  <!-- Suspension Condition -->
+<div>
+  <label>Suspension Condition</label>
+  <select id="suspension_condition">
+    <option value="Good">Good</option>
+    <option value="Average">Average</option>
+    <option value="Poor">Poor</option>
+  </select>
+</div>
+
+<!-- Battery Condition -->
+<div>
+  <label>Battery Condition</label>
+  <select id="battery_condition">
+    <option value="Good">Good</option>
+    <option value="Average">Average</option>
+    <option value="Poor">Poor</option>
+  </select>
+</div>
+
+<!-- AC Cooling -->
+<div>
+  <label>AC Cooling</label>
+  <select id="ac_cooling">
+    <option value="Good">Good</option>
+    <option value="Average">Average</option>
+    <option value="Poor">Poor</option>
+  </select>
+</div>
+
+<!-- Rattling Noises -->
+<div>
+  <label>Rattling Noises</label>
+  <select id="rattling_noises">
+    <option value="Occasional">Occasional</option>
+    <option value="Present">Present</option>
+  </select>
+</div>
+
+<!-- Idle Vibration -->
+<div>
+  <label>Idle Vibration</label>
+  <select id="idle_vibration">
+    <option value="Good">Good</option>
+    <option value="Average">Average</option>
+    <option value="Poor">Poor</option>
+  </select>
+</div>
+
+<!-- Engine Start -->
+<div>
+  <label>Engine Start</label>
+  <select id="engine_start">
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+</div>
+
+<!-- Acceleration Condition -->
+<div>
+  <label>Acceleration Condition</label>
+  <select id="acceleration_condition">
+    <option value="Good">Good</option>
+    <option value="Average">Average</option>
+    <option value="Poor">Poor</option>
+  </select>
+</div>
+
+<!-- Brakes Drive -->
+<div>
+  <label>Brakes Drive</label>
+  <select id="brakes_drive">
+    <option value="Good">Good</option>
+    <option value="Average">Average</option>
+    <option value="Poor">Poor</option>
+  </select>
+</div>
+
+</div>
+
+<div class="section-title">Market Trend (Optional)</div>
+<div class="grid">
+  <div>
+    <label>Market Trend Index</label>
+    <input type="number" id="market_trend_index" step="0.01" min="0.70" max="1.35" placeholder="1.00 = neutral market">
+  </div>
+</div>
+
+<div class="action">
+  <button onclick="calculate()">Get Estimated Value</button>
+</div>
+
+<div id="result">
+  <div class="price" id="price">Rs. --</div>
+  <div class="trend-note" id="trend-note"></div>
+  <button class="emi-btn" onclick="goToEMI()">Check EMI Options</button>
+</div>
+
+</div>
+</div>
+
+<script>
+let csvData = [];
+let predictedPrice = 0;
+fetch("/static/data2.csv")
+
+  .then(res => res.text())
+  .then(text => {
+    const rows = text.trim().split("\n").slice(1);
+    csvData = rows.map(r => {
+      const c = r.split(",");
+      return {
+        Make: c[0],
+        Model: c[1],
+        City: c[c.length - 3],
+        Color: c[c.length - 2],
+        Variant: c[c.length - 1]
+      };
+    });
+    fillMakes(); fillColors(); fillCities();
+  });
+
+function fillMakes() {
+  make.innerHTML = `<option value="">Select Make</option>`;
+  [...new Set(csvData.map(d => d.Make))].forEach(m => make.innerHTML += `<option>${m}</option>`);
+}
+function loadModels() {
+  model.disabled = false;
+  model.innerHTML = `<option value="">Select Model</option>`;
+  [...new Set(csvData.filter(d => d.Make === make.value).map(d => d.Model))]
+    .forEach(m => model.innerHTML += `<option>${m}</option>`);
+}
+function loadVariants() {
+  variant.disabled = false;
+  variant.innerHTML = `<option value="">Select Variant</option>`;
+  [...new Set(csvData.filter(d => d.Make === make.value && d.Model === model.value).map(d => d.Variant))]
+    .forEach(v => variant.innerHTML += `<option>${v}</option>`);
+}
+function fillColors() {
+  color.innerHTML = `<option value="">Select Color</option>`;
+  [...new Set(csvData.map(d => d.Color))].forEach(c => color.innerHTML += `<option>${c}</option>`);
+}
+function fillCities() {
+  city.innerHTML = `<option value="">Select City</option>`;
+  [...new Set(csvData.map(d => d.City))].forEach(c => city.innerHTML += `<option>${c}</option>`);
+}
+
+function goToEMI() {
+  window.location.href = `/emi?price=${predictedPrice}`;
+}
+
+function validateRequiredInputs(payload) {
+  const required = [
+    "make", "model", "variant", "city", "year", "kms", "mileage",
+    "owners", "fuel", "transmission", "color"
+  ];
+  const missing = required.filter(k => payload[k] === "" || payload[k] == null);
+  if (missing.length) {
+    alert("Please fill required fields: " + missing.join(", "));
+    return false;
+  }
+
+  const year = Number(payload.year);
+  const kms = Number(payload.kms);
+  const mileage = Number(payload.mileage);
+  const owners = Number(payload.owners);
+
+  if (year < 1990 || year > 2026) {
+    alert("Please enter a valid manufacturing year (1990-2026).");
+    return false;
+  }
+  if (kms <= 0) {
+    alert("Kilometers driven must be greater than 0.");
+    return false;
+  }
+  if (mileage <= 0) {
+    alert("Mileage must be greater than 0.");
+    return false;
+  }
+  if (owners <= 0) {
+    alert("Owners must be at least 1.");
+    return false;
+  }
+  return true;
+}
+
+function calculate() {
+  const payload = {
+    make: document.getElementById("make").value,
+    model: document.getElementById("model").value,
+    variant: document.getElementById("variant").value,
+    city: document.getElementById("city").value,
+    year: document.getElementById("year").value,
+    kms: document.getElementById("kms").value,
+    mileage: document.getElementById("mileage").value,
+    owners: document.getElementById("owners").value,
+
+    fuel: document.getElementById("fuel").value,
+    transmission: document.getElementById("transmission").value,
+    color: document.getElementById("color").value,
+
+    rc_status: document.getElementById("rc_status").value,
+    loan_clearance: document.getElementById("loan_clearance").value,
+    accident_history: document.getElementById("accident_history").value,
+    insurance_claims: document.getElementById("insurance_claims").value,
+    service_records: document.getElementById("service_records").value,
+
+    body_panels: document.getElementById("body_panels").value,
+    rust: document.getElementById("rust").value,
+    glass_condition: document.getElementById("glass_condition").value,
+    lights_condition: document.getElementById("lights_condition").value,
+    tyres: document.getElementById("tyres").value,
+    seats_condition: document.getElementById("seats_condition").value,
+    electronics_condition: document.getElementById("electronics_condition").value,
+    smell: document.getElementById("smell").value,
+    engine_condition: document.getElementById("engine_condition").value,
+    transmission_condition: document.getElementById("transmission_condition").value,
+    brakes_condition: document.getElementById("brakes_condition").value,
+    steering_condition: document.getElementById("steering_condition").value,
+    airbags_present: document.getElementById("airbags_present").value,
+    airbags_count: document.getElementById("airbags_count").value,
+    safety_systems: document.getElementById("safety_systems").value,
+    suspension_condition: document.getElementById("suspension_condition").value,
+    battery_condition: document.getElementById("battery_condition").value,
+    ac_cooling: document.getElementById("ac_cooling").value,
+    rattling_noises: document.getElementById("rattling_noises").value,
+    idle_vibration: document.getElementById("idle_vibration").value,
+    engine_start: document.getElementById("engine_start").value,
+    acceleration_condition: document.getElementById("acceleration_condition").value,
+    brakes_drive: document.getElementById("brakes_drive").value,
+    market_trend_index: document.getElementById("market_trend_index").value
+
+  };
+
+  if (!validateRequiredInputs(payload)) {
+    document.getElementById("result").style.display = "none";
+    return;
+  }
+
+  fetch("/predict", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      predictedPrice = data.predicted_price;
+      document.getElementById("price").innerText =
+        "Rs. " + predictedPrice.toLocaleString("en-IN") +
+        " (Range: Rs. " + data.price_low.toLocaleString("en-IN") +
+        " - Rs. " + data.price_high.toLocaleString("en-IN") + ")";
+      document.getElementById("trend-note").innerText =
+        "Trend multiplier applied: x" + Number(data.market_trend_multiplier || 1).toFixed(2) +
+        " (" + (data.market_trend_source || "auto") + ")";
+      document.getElementById("result").style.display = "block";
+    } else {
+      alert("Prediction failed: " + data.error);
+    }
+  })
+  .catch(err => {
+    alert("Server error. Check Flask is running.");
+    console.error(err);
+  });
+}
+</script>
+
+</body>
+</html>
+
+

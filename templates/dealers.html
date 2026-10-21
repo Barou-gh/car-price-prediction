@@ -1,0 +1,459 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Top Used Car Dealers in India & Price Compare - AutoValue 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --card: rgba(255,255,255,0.88);
+      --border: rgba(226,232,240,0.85);
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+      --radius: 14px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e40af, #065f46);
+      color: white;
+      padding: 4.5rem 1.25rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.25) 0%, transparent 62%);
+    }
+
+    h1 {
+      position: relative;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      font-weight: 800;
+    }
+
+    header p {
+      position: relative;
+      font-size: clamp(1rem, 2.8vw, 1.2rem);
+      max-width: 860px;
+      margin: 0.9rem auto 0;
+      opacity: 0.94;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 2.25rem auto;
+      padding: 0 1rem;
+    }
+
+    .compare-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .compare-panel h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(160px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .form-grid input {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 0.65rem 0.95rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.92rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-secondary { background: #0f172a; color: #fff; }
+
+    .compare-summary {
+      margin-top: 0.8rem;
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .dealer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1rem;
+    }
+
+    .dealer-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      min-width: 0;
+    }
+
+    .dealer-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .dealer-rating {
+      color: #ca8a04;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .dealer-info {
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.94rem;
+    }
+
+    .dealer-info strong { color: var(--text); }
+
+    .dealer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 0.2rem;
+    }
+
+    .muted-note {
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem 1rem 2rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .form-grid {
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        padding: 3.4rem 0.9rem 2.4rem;
+      }
+
+      .container {
+        padding: 0 0.75rem;
+      }
+
+      .compare-panel {
+        padding: 1rem;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dealer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .dealer-actions .btn {
+        width: auto;
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Used Car Dealers Price Compare (India)</h1>
+  <p>Enter a car once, then open direct search links across all listed dealers to compare prices quickly.</p>
+</header>
+
+<div class="container">
+  <section class="compare-panel">
+    <h2>Search Once, Compare Across India Dealers</h2>
+    <div class="form-grid">
+      <input id="makeInput" type="text" placeholder="Make (e.g., Toyota)" />
+      <input id="modelInput" type="text" placeholder="Model (e.g., Corolla)" />
+      <input id="yearInput" type="text" placeholder="Year (optional)" />
+      <input id="cityInput" type="text" placeholder="City (India, optional)" />
+    </div>
+    <div class="form-actions">
+      <button id="compareAllBtn" class="btn btn-primary" type="button">
+        <i class="fa-solid fa-scale-balanced"></i> Compare On All Dealers
+      </button>
+      <button id="fillDemoBtn" class="btn btn-secondary" type="button">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Fill Example
+      </button>
+    </div>
+    <p id="compareSummary" class="compare-summary">Tip: Add at least Make + Model for better results.</p>
+  </section>
+
+  <div class="dealer-grid" id="dealerGrid">
+    <div class="dealer-card" data-url="https://www.google.com/search?q=site:cars24.com+{query}" data-name="CARS24">
+      <div class="dealer-name">CARS24</div>
+      <div class="dealer-rating">&#9733;&#9733;&#9733;&#9733;&#9734; 4.6</div>
+      <div class="dealer-info">
+        <strong>Region:</strong> India<br>
+        <strong>Specialties:</strong> 300-point inspection, buy/sell, financing
+      </div>
+      <div class="dealer-actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="https://www.cars24.com">Visit Dealer</a>
+        <a class="btn btn-secondary search-btn" target="_blank" rel="noopener noreferrer" href="#">Search This Car</a>
+      </div>
+    </div>
+
+    <div class="dealer-card" data-url="https://www.google.com/search?q=site:spinny.com+{query}" data-name="Spinny">
+      <div class="dealer-name">Spinny</div>
+      <div class="dealer-rating">&#9733;&#9733;&#9733;&#9733;&#9734; 4.5</div>
+      <div class="dealer-info">
+        <strong>Region:</strong> India<br>
+        <strong>Specialties:</strong> Assured cars, warranty, doorstep options
+      </div>
+      <div class="dealer-actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="https://www.spinny.com">Visit Dealer</a>
+        <a class="btn btn-secondary search-btn" target="_blank" rel="noopener noreferrer" href="#">Search This Car</a>
+      </div>
+    </div>
+
+    <div class="dealer-card" data-url="https://www.google.com/search?q=site:cardekho.com+{query}" data-name="CarDekho">
+      <div class="dealer-name">CarDekho / Gaadi</div>
+      <div class="dealer-rating">&#9733;&#9733;&#9733;&#9733;&#9734; 4.4</div>
+      <div class="dealer-info">
+        <strong>Region:</strong> India<br>
+        <strong>Specialties:</strong> Large dealer network, comparison tools
+      </div>
+      <div class="dealer-actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="https://www.cardekho.com/used-cars">Visit Dealer</a>
+        <a class="btn btn-secondary search-btn" target="_blank" rel="noopener noreferrer" href="#">Search This Car</a>
+      </div>
+    </div>
+
+    <div class="dealer-card" data-url="https://www.google.com/search?q=site:carwale.com+{query}" data-name="CarWale">
+      <div class="dealer-name">CarWale</div>
+      <div class="dealer-rating">&#9733;&#9733;&#9733;&#9733;&#9734; 4.4</div>
+      <div class="dealer-info">
+        <strong>Region:</strong> India<br>
+        <strong>Specialties:</strong> Valuation, dealer ratings, reviews
+      </div>
+      <div class="dealer-actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="https://www.carwale.com/used">Visit Dealer</a>
+        <a class="btn btn-secondary search-btn" target="_blank" rel="noopener noreferrer" href="#">Search This Car</a>
+      </div>
+    </div>
+
+    <div class="dealer-card" data-url="https://www.google.com/search?q=site:mahindrafirstchoice.com+{query}" data-name="Mahindra First Choice">
+      <div class="dealer-name">Mahindra First Choice</div>
+      <div class="dealer-rating">&#9733;&#9733;&#9733;&#9733;&#9734; 4.5</div>
+      <div class="dealer-info">
+        <strong>Region:</strong> India<br>
+        <strong>Specialties:</strong> Certified multi-brand used cars
+      </div>
+      <div class="dealer-actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="https://www.mahindrafirstchoice.com">Visit Dealer</a>
+        <a class="btn btn-secondary search-btn" target="_blank" rel="noopener noreferrer" href="#">Search This Car</a>
+      </div>
+    </div>
+
+    <div class="dealer-card" data-url="https://www.google.com/search?q=site:marutisuzukitruevalue.com+{query}" data-name="Maruti True Value">
+      <div class="dealer-name">Maruti True Value</div>
+      <div class="dealer-rating">&#9733;&#9733;&#9733;&#9733;&#9733; 4.7</div>
+      <div class="dealer-info">
+        <strong>Region:</strong> India<br>
+        <strong>Specialties:</strong> Maruti-certified inventory and warranty
+      </div>
+      <div class="dealer-actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="https://www.marutisuzukitruevalue.com">Visit Dealer</a>
+        <a class="btn btn-secondary search-btn" target="_blank" rel="noopener noreferrer" href="#">Search This Car</a>
+      </div>
+    </div>
+
+    <div class="dealer-card" data-url="https://www.google.com/search?q=site:olx.in+{query}" data-name="OLX Autos / Cars & Bikes">
+      <div class="dealer-name">OLX Autos / Cars &amp; Bikes</div>
+      <div class="dealer-rating">&#9733;&#9733;&#9733;&#9733;&#9734; 4.3</div>
+      <div class="dealer-info">
+        <strong>Region:</strong> India<br>
+        <strong>Specialties:</strong> Classified reach and direct owner listings
+      </div>
+      <div class="dealer-actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="https://www.olx.in">Visit Dealer</a>
+        <a class="btn btn-secondary search-btn" target="_blank" rel="noopener noreferrer" href="#">Search This Car</a>
+      </div>
+    </div>
+
+    <div class="dealer-card" data-url="https://www.google.com/search?q=site:bigboytoyz.com+{query}" data-name="Big Boy Toyz">
+      <div class="dealer-name">Big Boy Toyz</div>
+      <div class="dealer-rating">&#9733;&#9733;&#9733;&#9733;&#9733; 4.8</div>
+      <div class="dealer-info">
+        <strong>Region:</strong> India<br>
+        <strong>Specialties:</strong> Premium and luxury pre-owned segment
+      </div>
+      <div class="dealer-actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="https://www.bigboytoyz.com">Visit Dealer</a>
+        <a class="btn btn-secondary search-btn" target="_blank" rel="noopener noreferrer" href="#">Search This Car</a>
+      </div>
+    </div>
+  </div>
+
+  <p class="muted-note">
+    Note: dealer search URL formats can change over time. If a search link opens a home page, use the same query in that dealer's website search box.
+  </p>
+</div>
+
+<footer>
+  &copy; 2026 AutoValue - Dealer discovery support.
+</footer>
+
+<script>
+  const makeInput = document.getElementById('makeInput');
+  const modelInput = document.getElementById('modelInput');
+  const yearInput = document.getElementById('yearInput');
+  const cityInput = document.getElementById('cityInput');
+  const compareSummary = document.getElementById('compareSummary');
+  const compareAllBtn = document.getElementById('compareAllBtn');
+  const fillDemoBtn = document.getElementById('fillDemoBtn');
+
+  function buildQuery() {
+    const parts = [
+      makeInput.value.trim(),
+      modelInput.value.trim(),
+      yearInput.value.trim(),
+      cityInput.value.trim()
+    ].filter(Boolean);
+    return parts.join(' ');
+  }
+
+  function buildSearchUrl(template, query) {
+    return template.replace('{query}', encodeURIComponent(query));
+  }
+
+  function updateDealerSearchLinks() {
+    const query = buildQuery();
+    const cards = document.querySelectorAll('.dealer-card');
+
+    cards.forEach((card) => {
+      const searchBtn = card.querySelector('.search-btn');
+      const template = card.dataset.url;
+
+      if (!query) {
+        searchBtn.href = '#';
+        searchBtn.setAttribute('aria-disabled', 'true');
+        return;
+      }
+
+      searchBtn.href = buildSearchUrl(template, query);
+      searchBtn.removeAttribute('aria-disabled');
+    });
+
+    if (query) {
+      compareSummary.textContent = `Current compare query: "${query}". Use "Search This Car" on any dealer or open all dealers at once.`;
+    } else {
+      compareSummary.textContent = 'Tip: Add at least Make + Model for better results.';
+    }
+  }
+
+  compareAllBtn.addEventListener('click', () => {
+    const query = buildQuery();
+    if (!query) {
+      compareSummary.textContent = 'Please enter at least a Make or Model before comparing.';
+      return;
+    }
+
+    const cards = document.querySelectorAll('.dealer-card');
+    cards.forEach((card) => {
+      const template = card.dataset.url;
+      const url = buildSearchUrl(template, query);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
+  });
+
+  fillDemoBtn.addEventListener('click', () => {
+    const hasAnyQueryInput = [makeInput, modelInput, yearInput, cityInput]
+      .some((el) => el.value.trim().length > 0);
+
+    if (!hasAnyQueryInput) {
+      makeInput.value = 'Toyota';
+      modelInput.value = 'Corolla';
+      yearInput.value = '2021';
+      cityInput.value = 'Bangalore';
+    }
+
+    updateDealerSearchLinks();
+  });
+
+  [makeInput, modelInput, yearInput, cityInput].forEach((el) => {
+    el.addEventListener('input', updateDealerSearchLinks);
+  });
+
+  updateDealerSearchLinks();
+</script>
+
+</body>
+</html>

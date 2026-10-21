@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EMI Calculator – AutoValue 2026</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg:#f8fafc; --surface:#fff; --text:#0f172a; --text-light:#475569;
+      --primary:#2563eb; --accent:#10b981;
+      --border:rgba(226,232,240,.7); --shadow:0 20px 50px rgba(0,0,0,.14);
+      --radius:18px;
+    }
+
+    body { font-family:Inter,sans-serif; background:var(--bg); margin:0; }
+    header {
+      background:linear-gradient(135deg,#1e40af,#065f46);
+      color:#fff; text-align:center; padding:5rem 1.5rem 3.5rem;
+    }
+    h1 { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,7vw,4.2rem); margin:0; }
+    .container { max-width:900px; margin:3rem auto; padding:0 1.5rem; }
+    .card {
+      background:#fff; border-radius:var(--radius);
+      padding:3rem; box-shadow:var(--shadow); border:1px solid var(--border);
+    }
+    label { font-weight:600; color:var(--text-light); display:block; margin:.8rem 0 .4rem; }
+    input {
+      width:100%; padding:1rem 1.2rem; border-radius:12px;
+      border:1px solid var(--border); font-size:1.1rem;
+    }
+    .actions {
+      display:flex; gap:1.5rem; justify-content:center;
+      flex-wrap:wrap; margin-top:2.5rem;
+    }
+    button, a.btn {
+      padding:1.3rem 3.5rem; font-size:1.2rem;
+      border:none; border-radius:999px; cursor:pointer;
+      color:#fff; text-decoration:none;
+    }
+    button {
+      background:linear-gradient(90deg,#2563eb,#3b82f6);
+    }
+    a.btn {
+      background:linear-gradient(90deg,#10b981,#34d399);
+    }
+    #result {
+      display:none; margin-top:3rem; text-align:center;
+      background:#ecfdf5; padding:3rem; border-radius:24px;
+    }
+    .emi {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(3.5rem,9vw,5.5rem);
+      color:#10b981;
+    }
+    #chartBox { max-width:420px; margin:2rem auto; }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Car Loan EMI Calculator</h1>
+  <p>Instant EMI & interest breakdown</p>
+</header>
+
+<div class="container">
+  <div class="card">
+
+    <label>Loan Amount (₹)</label>
+    <input type="number" id="amount" placeholder="Auto-filled from valuation">
+
+    <label>Interest Rate (% per annum)</label>
+    <input type="number" id="rate" value="9.25" step="0.1">
+
+    <label>Tenure (Years)</label>
+    <input type="number" id="years" value="5">
+
+    <div class="actions">
+      <button onclick="calculateEMI()">
+        <i class="fas fa-calculator"></i> Calculate EMI
+      </button>
+
+      <a href="/dealers" class="btn">
+        <i class="fas fa-store"></i> Compare Dealers
+      </a>
+    </div>
+
+  </div>
+
+  <div id="result">
+    <div class="emi" id="emi">₹ --</div>
+    <p style="font-size:1.3rem;">
+      Total Interest: <strong id="interest">₹ --</strong><br>
+      Total Payable: <strong id="total">₹ --</strong>
+    </p>
+
+    <div id="chartBox">
+      <canvas id="emiChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+let chart = null;
+
+// Auto-fill loan amount from valuation page
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const price = params.get("price");
+  if (price) {
+    document.getElementById("amount").value = price;
+  }
+});
+
+function calculateEMI() {
+  const P = parseFloat(document.getElementById("amount").value);
+  const r = parseFloat(document.getElementById("rate").value) / 100 / 12;
+  const n = parseInt(document.getElementById("years").value) * 12;
+
+  if (!P || !r || !n) {
+    alert("Please enter valid loan details");
+    return;
+  }
+
+  const emi = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+  const total = emi * n;
+  const interest = total - P;
+
+  document.getElementById("emi").innerText =
+    "₹ " + Math.round(emi).toLocaleString("en-IN");
+  document.getElementById("interest").innerText =
+    "₹ " + Math.round(interest).toLocaleString("en-IN");
+  document.getElementById("total").innerText =
+    "₹ " + Math.round(total).toLocaleString("en-IN");
+
+  document.getElementById("result").style.display = "block";
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(document.getElementById("emiChart"), {
+    type: "pie",
+    data: {
+      labels: ["Principal", "Interest"],
+      datasets: [{
+        data: [P, interest],
+        backgroundColor: ["#2563eb", "#10b981"]
+      }]
+    }
+  });
+}
+</script>
+
+</body>
+</html>
